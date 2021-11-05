@@ -32,6 +32,7 @@
     "@nestjs/microservices": "^8.1.2",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
+    "json-colorizer": "^2.2.2",
     "mwn": "^1.11.4",
     "nest-mwn": "^1.0.0",
     "pg": "^8.7.1",

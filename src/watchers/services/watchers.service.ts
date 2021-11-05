@@ -6,15 +6,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { processorPath } from '../watcher.constants';
 import { WatcherPayload } from '../interfaces';
 import { ApiResponse } from 'mwn';
+import { CoreProvider } from '@crawler/shared';
+import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
+import colorizeJson from 'json-colorizer';
 
 @Injectable()
-export class WatchersService implements OnModuleInit {
+export class WatchersService extends CoreProvider implements OnModuleInit {
   private readonly pool: Map<string, Worker> = new Map();
 
   constructor(
+    @RootLogger() rootLogger: Bunyan,
     @InjectRepository(Watcher)
     private watchersRepository: Repository<Watcher>,
-  ) {}
+  ) {
+    super(rootLogger);
+  }
 
   async onModuleInit() {
     //await this.watchersRepository.delete({});
@@ -51,7 +57,6 @@ export class WatchersService implements OnModuleInit {
   }
 
   protected async onMessage(payload: WatcherPayload) {
-    // console.log('payload', payload);
     const { cmd, watcherId, data } = payload;
     switch (cmd) {
       case 'data': {
@@ -85,7 +90,7 @@ export class WatchersService implements OnModuleInit {
         await this.setInactive(watcher.id);
       })
       .on('error', async (err) => {
-        console.error(err);
+        this.log.error(err);
         await this.setInactive(watcher.id);
       });
   }
@@ -94,6 +99,8 @@ export class WatchersService implements OnModuleInit {
     const watcher = await this.findById(watcherId);
     const worker = this.createWorker(watcher);
     this.pool.set(watcher.id, worker);
+    await new Promise((resolve) => worker.on('online', resolve));
+    this.log.debug(`watcher ${watcherId} has been started`);
   }
 
   protected async terminate(id: Watcher['id']) {
@@ -107,10 +114,12 @@ export class WatchersService implements OnModuleInit {
 
   async pause(id: Watcher['id']): Promise<void> {
     await this.terminate(id);
+    this.log.debug(`watcher ${id} has been paused`);
   }
 
   async stop(id: Watcher['id']): Promise<void> {
     await this.terminate(id);
     await this.watchersRepository.update(id, { continue: null });
+    this.log.debug(`watcher ${id} has been stopped`);
   }
 }

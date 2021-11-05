@@ -3,6 +3,7 @@ import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 import Long from 'long';
 import _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
+import { Metadata } from '@grpc/grpc-js';
 
 export const protobufPackage = 'webarchiver.crawler.v1';
 
@@ -37,34 +38,56 @@ export interface Watcher {
 export const WEBARCHIVER_CRAWLER_V1_PACKAGE_NAME = 'webarchiver.crawler.v1';
 
 export interface WatchersServiceClient {
-  getWatcher(request: GetWatcherRequest): Observable<Watcher>;
+  getWatcher(
+    request: GetWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<Watcher>;
 
-  createWatcher(request: CreateWatcherRequest): Observable<Watcher>;
+  createWatcher(
+    request: CreateWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<Watcher>;
 
-  updateWatcher(request: UpdateWatcherRequest): Observable<Watcher>;
+  updateWatcher(
+    request: UpdateWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<Watcher>;
 
-  runWatcher(request: GetWatcherRequest): Observable<RunWatcherResponse>;
+  runWatcher(
+    request: GetWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<RunWatcherResponse>;
 
-  pauseWatcher(request: GetWatcherRequest): Observable<PauseWatcherResponse>;
+  pauseWatcher(
+    request: GetWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<PauseWatcherResponse>;
 
-  stopWatcher(request: GetWatcherRequest): Observable<StopWatcherResponse>;
+  stopWatcher(
+    request: GetWatcherRequest,
+    metadata?: Metadata,
+  ): Observable<StopWatcherResponse>;
 }
 
 export interface WatchersServiceController {
   getWatcher(
     request: GetWatcherRequest,
+    metadata?: Metadata,
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   createWatcher(
     request: CreateWatcherRequest,
+    metadata?: Metadata,
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   updateWatcher(
     request: UpdateWatcherRequest,
+    metadata?: Metadata,
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   runWatcher(
     request: GetWatcherRequest,
+    metadata?: Metadata,
   ):
     | Promise<RunWatcherResponse>
     | Observable<RunWatcherResponse>
@@ -72,6 +95,7 @@ export interface WatchersServiceController {
 
   pauseWatcher(
     request: GetWatcherRequest,
+    metadata?: Metadata,
   ):
     | Promise<PauseWatcherResponse>
     | Observable<PauseWatcherResponse>
@@ -79,6 +103,7 @@ export interface WatchersServiceController {
 
   stopWatcher(
     request: GetWatcherRequest,
+    metadata?: Metadata,
   ):
     | Promise<StopWatcherResponse>
     | Observable<StopWatcherResponse>

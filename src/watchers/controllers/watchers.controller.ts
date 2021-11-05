@@ -6,35 +6,81 @@ import {
   WatchersServiceController,
   WatchersServiceControllerMethods,
   UpdateWatcherRequest,
-} from '../../proto/watcher';
+} from '@crawler/proto/watcher';
 import { WatchersService } from '../services';
+import { Metadata } from '@grpc/grpc-js';
+import { CoreProvider } from '@crawler/shared';
+import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 
 @Controller('watchers')
 @WatchersServiceControllerMethods()
-export class WatchersController implements WatchersServiceController {
-  constructor(private watchersService: WatchersService) {}
+export class WatchersController
+  extends CoreProvider
+  implements WatchersServiceController
+{
+  constructor(
+    @RootLogger() rootLogger: Bunyan,
+    private watchersService: WatchersService,
+  ) {
+    super(rootLogger);
+  }
 
   createWatcher({ name }: CreateWatcherRequest): Promise<Watcher> {
     return this.watchersService.create(name, {});
   }
 
-  getWatcher({ id }: GetWatcherRequest): Promise<Watcher> {
-    return this.watchersService.findById(id);
+  async getWatcher(
+    { id }: GetWatcherRequest,
+    metadata: Metadata,
+  ): Promise<Watcher> {
+    try {
+      return await this.watchersService.findById(id);
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 
-  updateWatcher({ id, ...data }: UpdateWatcherRequest): Promise<Watcher> {
-    return this.watchersService.update(id, data);
+  async updateWatcher(
+    { id, ...data }: UpdateWatcherRequest,
+    metadata: Metadata,
+  ): Promise<Watcher> {
+    try {
+      return await this.watchersService.update(id, data);
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 
-  runWatcher({ id }: GetWatcherRequest): Promise<void> {
-    return this.watchersService.run(id);
+  async runWatcher(
+    { id }: GetWatcherRequest,
+    metadata: Metadata,
+  ): Promise<void> {
+    try {
+      return await this.watchersService.run(id);
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 
-  stopWatcher({ id }: GetWatcherRequest): Promise<void> {
-    return this.watchersService.stop(id);
+  async stopWatcher(
+    { id }: GetWatcherRequest,
+    metadata: Metadata,
+  ): Promise<void> {
+    try {
+      return await this.watchersService.stop(id);
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 
-  pauseWatcher({ id }: GetWatcherRequest): Promise<void> {
-    return this.watchersService.pause(id);
+  async pauseWatcher(
+    { id }: GetWatcherRequest,
+    metadata: Metadata,
+  ): Promise<void> {
+    try {
+      return this.watchersService.pause(id);
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 }
