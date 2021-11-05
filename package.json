@@ -2,11 +2,15 @@
   "name": "webarchiver-ms-crawler2",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": {
+    "name": "Vitaly Pereslavtsev",
+    "email": "dev@pereslavtsev.com",
+    "url": "https://www.pereslavtsev.com/"
+  },
+  "license": "ISC",
   "scripts": {
     "prebuild": "rimraf dist",
+    "prepare": "husky install",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "protoc:gen": "make protoc-gen",
@@ -57,6 +61,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
     "jest": "^27.2.5",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
