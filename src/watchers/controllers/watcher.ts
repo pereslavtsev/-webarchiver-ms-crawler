@@ -4,7 +4,13 @@ import Long from 'long';
 import _m0 from 'protobufjs/minimal';
 import { Observable } from 'rxjs';
 
-export const protobufPackage = 'crawler';
+export const protobufPackage = 'webarchiver.crawler.v1';
+
+export interface RunWatcherResponse {}
+
+export interface PauseWatcherResponse {}
+
+export interface StopWatcherResponse {}
 
 export interface GetWatcherRequest {
   id: string;
@@ -23,9 +29,12 @@ export interface UpdateWatcherRequest {
 export interface Watcher {
   id: string;
   name: string;
+  active: boolean;
+  createdAt: Date | undefined;
+  updatedAt: Date | undefined;
 }
 
-export const CRAWLER_PACKAGE_NAME = 'crawler';
+export const WEBARCHIVER_CRAWLER_V1_PACKAGE_NAME = 'webarchiver.crawler.v1';
 
 export interface WatchersServiceClient {
   getWatcher(request: GetWatcherRequest): Observable<Watcher>;
@@ -33,6 +42,12 @@ export interface WatchersServiceClient {
   createWatcher(request: CreateWatcherRequest): Observable<Watcher>;
 
   updateWatcher(request: UpdateWatcherRequest): Observable<Watcher>;
+
+  runWatcher(request: GetWatcherRequest): Observable<RunWatcherResponse>;
+
+  pauseWatcher(request: GetWatcherRequest): Observable<PauseWatcherResponse>;
+
+  stopWatcher(request: GetWatcherRequest): Observable<StopWatcherResponse>;
 }
 
 export interface WatchersServiceController {
@@ -47,6 +62,27 @@ export interface WatchersServiceController {
   updateWatcher(
     request: UpdateWatcherRequest,
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
+
+  runWatcher(
+    request: GetWatcherRequest,
+  ):
+    | Promise<RunWatcherResponse>
+    | Observable<RunWatcherResponse>
+    | RunWatcherResponse;
+
+  pauseWatcher(
+    request: GetWatcherRequest,
+  ):
+    | Promise<PauseWatcherResponse>
+    | Observable<PauseWatcherResponse>
+    | PauseWatcherResponse;
+
+  stopWatcher(
+    request: GetWatcherRequest,
+  ):
+    | Promise<StopWatcherResponse>
+    | Observable<StopWatcherResponse>
+    | StopWatcherResponse;
 }
 
 export function WatchersServiceControllerMethods() {
@@ -55,6 +91,9 @@ export function WatchersServiceControllerMethods() {
       'getWatcher',
       'createWatcher',
       'updateWatcher',
+      'runWatcher',
+      'pauseWatcher',
+      'stopWatcher',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

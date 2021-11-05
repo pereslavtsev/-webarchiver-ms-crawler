@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "protoc:gen": "protoc --plugin=node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=. **/**/**/*.proto --ts_proto_opt=esModuleInterop=true --ts_proto_opt=env=node --ts_proto_opt=nestJs=true",
+    "protoc:gen": "make protoc-gen",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -18,7 +18,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:debug": "make test-debug",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {

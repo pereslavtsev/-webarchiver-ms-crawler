@@ -4,11 +4,12 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { v4 as uuidv4 } from 'uuid';
+import { grpcClientOptions } from '../../grpc.options';
 
 @Injectable()
 export class LoggingInterceptor
@@ -27,7 +28,13 @@ export class LoggingInterceptor
       reqId,
       req: {
         method: context.getClass().name,
-        url: context.getHandler().name,
+        url:
+          '/' +
+          grpcClientOptions.options['package'] +
+          '.' +
+          context.getClass().name +
+          '/' +
+          context.getHandler().name,
       },
       res: {},
     });

@@ -1,12 +1,21 @@
 syntax = "proto3";
 
-package crawler;
+import "google/protobuf/timestamp.proto";
+
+package webarchiver.crawler.v1;
 
 service WatchersService {
   rpc GetWatcher (GetWatcherRequest) returns (Watcher);
   rpc CreateWatcher (CreateWatcherRequest) returns (Watcher);
   rpc UpdateWatcher (UpdateWatcherRequest) returns (Watcher);
+  rpc RunWatcher (GetWatcherRequest) returns (RunWatcherResponse);
+  rpc PauseWatcher (GetWatcherRequest) returns (PauseWatcherResponse);
+  rpc StopWatcher (GetWatcherRequest) returns (StopWatcherResponse);
 }
+
+message RunWatcherResponse {}
+message PauseWatcherResponse {}
+message StopWatcherResponse {}
 
 message GetWatcherRequest {
   string id = 1;
@@ -25,4 +34,7 @@ message UpdateWatcherRequest {
 message Watcher {
   string id = 1;
   string name = 2;
+  bool active = 3;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }

@@ -1,15 +1,11 @@
 import { Module, OnModuleInit } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { WatchersModule } from './watchers/watchers.module';
+import { WatchersModule } from './watchers';
 import { InjectBot } from 'nest-mwn';
 import { mwn } from 'mwn';
-import { SharedModule } from './shared/shared.module';
+import { SharedModule } from './shared';
 
 @Module({
-  imports: [SharedModule, WatchersModule, SharedModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [WatchersModule, SharedModule],
 })
 export class AppModule implements OnModuleInit {
   constructor(

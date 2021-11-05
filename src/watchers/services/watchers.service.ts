@@ -39,7 +39,7 @@ export class WatchersService implements OnModuleInit {
     });
   }
 
-  findById(id: Watcher['id']) {
+  findById(id: Watcher['id']): Promise<Watcher> {
     return this.watchersRepository.findOneOrFail(id);
   }
 

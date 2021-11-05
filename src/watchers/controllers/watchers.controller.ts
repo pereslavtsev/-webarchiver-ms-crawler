@@ -19,11 +19,22 @@ export class WatchersController implements WatchersServiceController {
   }
 
   getWatcher({ id }: GetWatcherRequest): Promise<Watcher> {
-    console.log(5435435)
     return this.watchersService.findById(id);
   }
 
   updateWatcher({ id, ...data }: UpdateWatcherRequest): Promise<Watcher> {
     return this.watchersService.update(id, data);
+  }
+
+  runWatcher({ id }: GetWatcherRequest): Promise<void> {
+    return this.watchersService.run(id);
+  }
+
+  stopWatcher({ id }: GetWatcherRequest): Promise<void> {
+    return this.watchersService.stop(id);
+  }
+
+  pauseWatcher({ id }: GetWatcherRequest): Promise<void> {
+    return this.watchersService.pause(id);
   }
 }
