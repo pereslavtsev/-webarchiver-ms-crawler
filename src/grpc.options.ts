@@ -5,7 +5,7 @@ export const grpcClientOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     url: 'localhost:9090',
-    package: 'hello',
-    protoPath: join(__dirname, './crawler.proto'),
+    package: 'crawler',
+    protoPath: join(__dirname, 'watchers', 'controllers', 'watcher.proto'),
   },
 };

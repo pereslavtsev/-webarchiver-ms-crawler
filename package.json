@@ -9,6 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "protoc:gen": "protoc --plugin=node_modules/ts-proto/protoc-gen-ts_proto --ts_proto_out=. **/**/**/*.proto --ts_proto_opt=esModuleInterop=true --ts_proto_opt=env=node --ts_proto_opt=nestJs=true",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -34,11 +35,13 @@
     "mwn": "^1.11.4",
     "nest-mwn": "^1.0.0",
     "pg": "^8.7.1",
+    "protobufjs": "^6.11.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.2.38",
-    "typeorm-naming-strategies": "^2.0.0"
+    "typeorm-naming-strategies": "^2.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -60,6 +63,7 @@
     "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
+    "ts-proto": "^1.85.0",
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
   },

@@ -3,10 +3,12 @@ import { WatchersService } from './services';
 import { Watcher } from './models/watcher.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WATCHERS } from './watchers.mock';
+import { WatchersController } from './controllers';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Watcher])],
   providers: [WatchersService],
+  controllers: [WatchersController],
 })
 export class WatchersModule implements OnModuleInit {
   constructor(private watchersService: WatchersService) {}

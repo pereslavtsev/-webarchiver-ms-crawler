@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package crawler;
+
+service WatchersService {
+  rpc GetWatcher (GetWatcherRequest) returns (Watcher);
+  rpc CreateWatcher (CreateWatcherRequest) returns (Watcher);
+  rpc UpdateWatcher (UpdateWatcherRequest) returns (Watcher);
+}
+
+message GetWatcherRequest {
+  string id = 1;
+}
+
+message CreateWatcherRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message UpdateWatcherRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message Watcher {
+  string id = 1;
+  string name = 2;
+}

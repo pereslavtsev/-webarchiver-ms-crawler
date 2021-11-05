@@ -17,13 +17,25 @@ export class WatchersService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    await this.watchersRepository.delete({});
+    //await this.watchersRepository.delete({});
   }
 
   create(name: Watcher['name'], query: Watcher['query']) {
     return this.watchersRepository.save({
       name,
       query,
+    });
+  }
+
+  async update(
+    id: Watcher['id'],
+    data: Partial<Pick<Watcher, 'name' | 'query'>>,
+  ) {
+    const watcher = await this.findById(id);
+
+    return this.watchersRepository.save({
+      ...watcher,
+      ...data,
     });
   }
 
