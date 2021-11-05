@@ -6,7 +6,7 @@ import {
   WatchersServiceController,
   WatchersServiceControllerMethods,
   UpdateWatcherRequest,
-} from './watcher';
+} from '../../proto/watcher';
 import { WatchersService } from '../services';
 
 @Controller('watchers')
