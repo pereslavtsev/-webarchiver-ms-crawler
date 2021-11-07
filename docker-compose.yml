@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=webarchiver
       - POSTGRES_DB=webarchiver
     tty: true
-  core:
+  server:
     container_name: "crawler"
     build: .
     environment:
@@ -18,6 +18,4 @@ services:
       - BOT_PASSWORD=${BOT_PASSWORD}
     depends_on:
       - db
-    ports:
-      - "50051:50051"
     tty: true
