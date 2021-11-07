@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: "crawler-db"
+    image: "postgres:13-alpine"
+    environment:
+      - POSTGRES_PASSWORD=webarchiver
+      - POSTGRES_USER=webarchiver
+      - POSTGRES_DB=webarchiver
+    tty: true
+  core:
+    container_name: "crawler"
+    build: .
+    environment:
+      - DATABASE_URL=postgres://webarchiver:webarchiver@db:5432/webarchiver
+      - BOT_USERNAME=${BOT_USERNAME}
+      - BOT_PASSWORD=${BOT_PASSWORD}
+    depends_on:
+      - db
+    ports:
+      - "50051:50051"
+    tty: true

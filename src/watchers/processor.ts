@@ -3,7 +3,7 @@ import { mwn } from 'mwn';
 import { MwnConstants } from 'nest-mwn';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
 import { SharedModule } from '@crawler/shared';
-import { Watcher } from './models/watcher.model';
+import { Watcher } from './models';
 import { WatcherPayload } from './interfaces';
 
 async function bootstrap() {
@@ -22,10 +22,6 @@ async function bootstrap() {
       data: json,
     } as WatcherPayload);
   }
-  parentPort.postMessage({
-    cmd: 'finished',
-    watcherId: id,
-  } as WatcherPayload);
 }
 
 if (!isMainThread) {

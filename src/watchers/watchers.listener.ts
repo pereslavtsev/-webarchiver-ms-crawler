@@ -4,7 +4,7 @@ import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { WatchersService } from './services';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Watcher } from '@crawler/watchers/models';
-import { ApiResponse } from 'mwn';
+import type { ApiPage, ApiResponse } from 'mwn';
 import colorizeJson from 'json-colorizer';
 
 @Injectable()
@@ -49,11 +49,11 @@ export class WatchersListener extends CoreProvider {
     data: ApiResponse;
   }): Promise<void> {
     const { watcher, data } = payload;
+    const [first, ...pages] = data.query.pages as ApiPage[];
+    const [last] = pages.slice().reverse();
 
     this.log.debug(
-      `${data.query.pages.length} pages received for watcher ${watcher.name} (${
-        data.query.pages[0].title
-      } - ${data.query.pages[data.query.pages.length - 1].title})`,
+      `${data.query.pages.length} pages received for watcher ${watcher.name} (${first.title} - ${last.title})`,
     );
 
     await this.watchersService.setContinueQuery(
