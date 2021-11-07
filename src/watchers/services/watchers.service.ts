@@ -8,7 +8,8 @@ import { WatcherPayload } from '../interfaces';
 import { ApiResponse } from 'mwn';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
-import colorizeJson from 'json-colorizer';
+import { buildPaginator } from 'typeorm-cursor-pagination';
+import { ListWatchersRequest } from '@crawler/proto/watcher';
 
 @Injectable()
 export class WatchersService extends CoreProvider implements OnModuleInit {
@@ -24,6 +25,22 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
 
   async onModuleInit() {
     //await this.watchersRepository.delete({});
+  }
+
+  findAll({ pageSize, pageToken }: ListWatchersRequest) {
+    const queryBuilder = this.watchersRepository.createQueryBuilder('watcher');
+
+    const paginator = buildPaginator({
+      entity: Watcher,
+      paginationKeys: ['id'],
+      query: {
+        limit: pageSize,
+        order: 'DESC',
+        afterCursor: pageToken,
+      },
+    });
+
+    return paginator.paginate(queryBuilder);
   }
 
   create(name: Watcher['name'], query: Watcher['query']) {

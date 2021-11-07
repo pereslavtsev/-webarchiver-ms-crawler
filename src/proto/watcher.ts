@@ -7,6 +7,17 @@ import { Metadata } from '@grpc/grpc-js';
 
 export const protobufPackage = 'webarchiver.crawler.v1';
 
+export interface ListWatchersRequest {
+  pageSize: number;
+  pageToken: string;
+  orderBy: string;
+}
+
+export interface ListWatchersResponse {
+  data: Watcher[];
+  nextPageToken: string;
+}
+
 export interface RunWatcherResponse {}
 
 export interface PauseWatcherResponse {}
@@ -38,6 +49,11 @@ export interface Watcher {
 export const WEBARCHIVER_CRAWLER_V1_PACKAGE_NAME = 'webarchiver.crawler.v1';
 
 export interface WatchersServiceClient {
+  listWatchers(
+    request: ListWatchersRequest,
+    metadata?: Metadata,
+  ): Observable<ListWatchersResponse>;
+
   getWatcher(
     request: GetWatcherRequest,
     metadata?: Metadata,
@@ -70,6 +86,14 @@ export interface WatchersServiceClient {
 }
 
 export interface WatchersServiceController {
+  listWatchers(
+    request: ListWatchersRequest,
+    metadata?: Metadata,
+  ):
+    | Promise<ListWatchersResponse>
+    | Observable<ListWatchersResponse>
+    | ListWatchersResponse;
+
   getWatcher(
     request: GetWatcherRequest,
     metadata?: Metadata,
@@ -113,6 +137,7 @@ export interface WatchersServiceController {
 export function WatchersServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
+      'listWatchers',
       'getWatcher',
       'createWatcher',
       'updateWatcher',

@@ -14,6 +14,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "protoc:gen": "make protoc-gen",
+    "protoc:gen:doc": "docker run --rm -v $(pwd)/doc:/out -v $(pwd)/src/proto:/protos pseudomuto/protoc-gen-doc",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -45,6 +46,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.2.38",
+    "typeorm-cursor-pagination": "^0.6.1",
     "typeorm-naming-strategies": "^2.0.0",
     "uuid": "^8.3.2"
   },

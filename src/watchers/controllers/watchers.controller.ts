@@ -6,6 +6,8 @@ import {
   WatchersServiceController,
   WatchersServiceControllerMethods,
   UpdateWatcherRequest,
+  ListWatchersRequest,
+  ListWatchersResponse,
 } from '@crawler/proto/watcher';
 import { WatchersService } from '../services';
 import { Metadata } from '@grpc/grpc-js';
@@ -25,8 +27,34 @@ export class WatchersController
     super(rootLogger);
   }
 
-  createWatcher({ name }: CreateWatcherRequest): Promise<Watcher> {
-    return this.watchersService.create(name, {});
+  async listWatchers(
+    { pageSize, pageToken, orderBy }: ListWatchersRequest,
+    metadata?: Metadata,
+  ): Promise<ListWatchersResponse> {
+    try {
+      const { data, cursor } = await this.watchersService.findAll({
+        pageSize,
+        pageToken,
+        orderBy,
+      });
+      return {
+        data,
+        nextPageToken: cursor.afterCursor,
+      };
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
+  }
+
+  createWatcher(
+    { name }: CreateWatcherRequest,
+    metadata: Metadata,
+  ): Promise<Watcher> {
+    try {
+      return this.watchersService.create(name, {});
+    } catch (error) {
+      this.exceptionFilter(error, metadata);
+    }
   }
 
   async getWatcher(

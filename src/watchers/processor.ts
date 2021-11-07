@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { mwn } from 'mwn';
 import { MwnConstants } from 'nest-mwn';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '@crawler/shared';
 import { Watcher } from './models/watcher.model';
 import { WatcherPayload } from './interfaces';
 

@@ -5,12 +5,24 @@ import "google/protobuf/timestamp.proto";
 package webarchiver.crawler.v1;
 
 service WatchersService {
+  rpc ListWatchers (ListWatchersRequest) returns (ListWatchersResponse);
   rpc GetWatcher (GetWatcherRequest) returns (Watcher);
   rpc CreateWatcher (CreateWatcherRequest) returns (Watcher);
   rpc UpdateWatcher (UpdateWatcherRequest) returns (Watcher);
   rpc RunWatcher (GetWatcherRequest) returns (RunWatcherResponse);
   rpc PauseWatcher (GetWatcherRequest) returns (PauseWatcherResponse);
   rpc StopWatcher (GetWatcherRequest) returns (StopWatcherResponse);
+}
+
+message ListWatchersRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string order_by = 3;
+}
+
+message ListWatchersResponse {
+  repeated Watcher data = 1;
+  string next_page_token = 2;
 }
 
 message RunWatcherResponse {}

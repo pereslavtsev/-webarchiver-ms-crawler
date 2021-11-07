@@ -42,6 +42,7 @@ specifiers:
   ts-proto: ^1.85.0
   tsconfig-paths: ^3.10.1
   typeorm: ^0.2.38
+  typeorm-cursor-pagination: ^0.6.1
   typeorm-naming-strategies: ^2.0.0
   typescript: ^4.3.5
   uuid: ^8.3.2
@@ -66,6 +67,7 @@ dependencies:
   rimraf: 3.0.2
   rxjs: 7.4.0
   typeorm: 0.2.38_pg@8.7.1
+  typeorm-cursor-pagination: 0.6.1_typeorm@0.2.38
   typeorm-naming-strategies: 2.0.0_typeorm@0.2.38
   uuid: 8.3.2
 
@@ -5981,6 +5983,14 @@ packages:
 
   /typedarray/0.0.6:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
+    dev: false
+
+  /typeorm-cursor-pagination/0.6.1_typeorm@0.2.38:
+    resolution: {integrity: sha512-lqlvXBG2prsYFsBVZrWz2/wgoAcYzWCks/EMxP4wIVTISEO70dHQtQuaWWQP528lnW+rQNRwIK8sUuXMKJKavw==}
+    peerDependencies:
+      typeorm: ^0.2
+    dependencies:
+      typeorm: 0.2.38_pg@8.7.1
     dev: false
 
   /typeorm-naming-strategies/2.0.0_typeorm@0.2.38:

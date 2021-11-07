@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 import { Bunyan } from '@eropple/nestjs-bunyan';
 import { Metadata, status as GrpcStatus } from '@grpc/grpc-js';
 import { EntityNotFoundError } from 'typeorm';

@@ -1,5 +1,3 @@
-
-
 protoc-gen:
 	protoc \
 		--plugin=node_modules/ts-proto/protoc-gen-ts_proto \
