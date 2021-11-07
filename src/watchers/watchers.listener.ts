@@ -49,11 +49,13 @@ export class WatchersListener extends CoreProvider {
     data: ApiResponse;
   }): Promise<void> {
     const { watcher, data } = payload;
+
     this.log.debug(
       `${data.query.pages.length} pages received for watcher ${watcher.name} (${
         data.query.pages[0].title
       } - ${data.query.pages[data.query.pages.length - 1].title})`,
     );
+
     await this.watchersService.setContinueQuery(
       watcher.id,
       data.continue ?? null,

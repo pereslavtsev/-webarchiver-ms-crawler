@@ -7,14 +7,24 @@ import { Metadata } from '@grpc/grpc-js';
 
 export const protobufPackage = 'webarchiver.crawler.v1';
 
-export interface Page {
+export interface PageInfo {
   id: number;
   ns: number;
   title: string;
+  contentModel: string;
+  pageLanguage: string;
+  pageLanguageHtmlCode: string;
+  pageLanguageDir: string;
+  touched: string;
+  lastRevId: number;
+  length: number;
+  fullUrl: string;
+  editUrl: string;
+  canonicalUrl: string;
 }
 
 export interface SubscribeWatcherResponse {
-  pages: Page[];
+  pages: PageInfo[];
 }
 
 export interface ListWatchersRequest {

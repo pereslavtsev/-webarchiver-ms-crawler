@@ -4,8 +4,7 @@ import { Watcher } from '../models/watcher.model';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { processorPath } from '../watcher.constants';
-import { WatcherPayload } from '../interfaces';
-import { ApiParams, ApiResponse } from "mwn";
+import { ApiParams } from 'mwn';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { buildPaginator } from 'typeorm-cursor-pagination';
@@ -111,8 +110,11 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
       .on('online', () =>
         this.eventEmitter.emit('watcher.started', { watcher }),
       )
-      .on('exit', () => this.eventEmitter.emit('watcher.finished', { watcher }))
-      .on('error', async (err) =>
+      .on('exit', async () => {
+        await this.terminate(watcher.id);
+        this.eventEmitter.emit('watcher.finished', { watcher });
+      })
+      .on('error', (err) =>
         this.eventEmitter.emit('watcher.failed', err, { watcher }),
       );
   }

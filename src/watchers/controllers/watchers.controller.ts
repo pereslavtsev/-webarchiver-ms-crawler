@@ -4,6 +4,7 @@ import {
   GetWatcherRequest,
   ListWatchersRequest,
   ListWatchersResponse,
+  PageInfo,
   SubscribeWatcherResponse,
   UpdateWatcherRequest,
   Watcher,
@@ -15,6 +16,8 @@ import { Metadata, ServerReadableStream } from '@grpc/grpc-js';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { Observable, Subject } from 'rxjs';
+import { OnEvent } from '@nestjs/event-emitter';
+import type { ApiPage, ApiResponse } from 'mwn';
 
 @Controller('watchers')
 @WatchersServiceControllerMethods()
@@ -22,7 +25,10 @@ export class WatchersController
   extends CoreProvider
   implements WatchersServiceController
 {
-  private readonly subscriptions: Subject<SubscribeWatcherResponse>[];
+  protected readonly subscriptions: Map<
+    Watcher['id'],
+    Subject<SubscribeWatcherResponse>
+  > = new Map();
 
   constructor(
     @RootLogger() rootLogger: Bunyan,
@@ -31,48 +37,58 @@ export class WatchersController
     super(rootLogger);
   }
 
+  @OnEvent('watcher.data')
+  async handleWatcherData({
+    watcher,
+    data,
+  }: {
+    watcher: Watcher;
+    data: ApiResponse;
+  }): Promise<void> {
+    const receivedPages = data?.query?.pages as ApiPage[];
+
+    if (!this.subscriptions.has(watcher.id)) {
+      return;
+    }
+
+    const subject = this.subscriptions.get(watcher.id);
+    const pages = receivedPages.map<PageInfo>((page) => ({
+      id: page.pageid,
+      ns: page.ns,
+      title: page.title,
+      contentModel: page['contentmodel'],
+      pageLanguage: page['pagelanguage'],
+      pageLanguageHtmlCode: page['pagelanguagehtmlcode'],
+      pageLanguageDir: page['pagelanguagedir'],
+      touched: page['touched'],
+      lastRevId: page['lastrevid'],
+      length: page['length'],
+      fullUrl: page['fullurl'],
+      editUrl: page['editurl'],
+      canonicalUrl: page['canonicalurl'],
+    }));
+    subject.next({ pages });
+  }
+
   subscribeWatcher(
     { id }: GetWatcherRequest,
     metadata?: Metadata,
     call?: ServerReadableStream<GetWatcherRequest, any>,
   ): Observable<SubscribeWatcherResponse> {
     const log = this.log.child({ reqId: metadata.get('x-correlation-id') });
-    const subject = new Subject<SubscribeWatcherResponse>();
     log.debug(`subscribing on watcher ${id} from ${call.getPeer()}...`);
-    const worker = this.watchersService.findWorker(id);
+
     call
       .on('end', () => console.log('end'))
-      .on('close', () => {
-        console.log('close');
-        subject.complete();
-      })
-      .on('finish', () => {
-        console.log('finish');
-        subject.complete();
-      });
+      .on('close', () => console.log('close'))
+      .on('finish', () => console.log('finish'));
 
-    worker
-      .on('message', ({ data }) => {
-        const receivedPages = data?.query?.pages;
-        if (receivedPages) {
-          console.log(
-            'receivedPages',
-            receivedPages.map((page) => page.title)[0],
-          );
-          const pages = receivedPages.map((page) => ({
-            id: page.pageid,
-            title: page.title,
-          }));
-          subject.next({
-            pages,
-          });
-        }
-      })
-      .on('exit', () => {
-        subject.complete();
-        this.log.debug(`stream has been finished`);
-      });
+    if (!this.subscriptions.has(id)) {
+      const subject = new Subject<SubscribeWatcherResponse>();
+      this.subscriptions.set(id, subject);
+    }
 
+    const subject = this.subscriptions.get(id);
     return subject.asObservable();
   }
 
