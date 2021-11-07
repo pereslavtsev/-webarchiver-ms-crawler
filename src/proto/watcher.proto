@@ -12,6 +12,27 @@ service WatchersService {
   rpc RunWatcher (GetWatcherRequest) returns (RunWatcherResponse);
   rpc PauseWatcher (GetWatcherRequest) returns (PauseWatcherResponse);
   rpc StopWatcher (GetWatcherRequest) returns (StopWatcherResponse);
+  rpc SubscribeWatcher(GetWatcherRequest) returns (stream SubscribeWatcherResponse) {}
+}
+
+message PageInfo {
+  int32 id = 1;
+  int32 ns = 2;
+  string title = 3;
+  string content_model = 4;
+  string page_language = 5;
+  string page_language_html_code = 6;
+  string page_language_dir = 7;
+  string touched = 8;
+  int32 last_rev_id = 9;
+  int32 length = 10;
+  string full_url = 11;
+  string edit_url = 12;
+  string canonical_url = 13;
+}
+
+message SubscribeWatcherResponse {
+  repeated PageInfo pages = 1;
 }
 
 message ListWatchersRequest {

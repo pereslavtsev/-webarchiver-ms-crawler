@@ -5,11 +5,12 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { processorPath } from '../watcher.constants';
 import { WatcherPayload } from '../interfaces';
-import { ApiResponse } from 'mwn';
+import { ApiParams, ApiResponse } from "mwn";
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { buildPaginator } from 'typeorm-cursor-pagination';
 import { ListWatchersRequest } from '@crawler/proto/watcher';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class WatchersService extends CoreProvider implements OnModuleInit {
@@ -19,12 +20,21 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
     @RootLogger() rootLogger: Bunyan,
     @InjectRepository(Watcher)
     private watchersRepository: Repository<Watcher>,
+    private eventEmitter: EventEmitter2,
   ) {
     super(rootLogger);
   }
 
   async onModuleInit() {
     //await this.watchersRepository.delete({});
+  }
+
+  findWorker(id: Watcher['id']): Worker | null {
+    const worker = this.pool.get(id);
+    if (!worker) {
+      return null;
+    }
+    return worker;
   }
 
   findAll({ pageSize, pageToken }: ListWatchersRequest) {
@@ -66,24 +76,10 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
     return this.watchersRepository.findOneOrFail(id);
   }
 
-  protected async onDataReceived(watcherId: Watcher['id'], data: ApiResponse) {
-    console.log('data', watcherId, data);
-    await this.watchersRepository.update(watcherId, {
-      continue: data.continue ?? null,
+  setContinueQuery(watcherId: Watcher['id'], continueQuery: ApiParams | null) {
+    return this.watchersRepository.update(watcherId, {
+      continue: continueQuery,
     });
-  }
-
-  protected async onMessage(payload: WatcherPayload) {
-    const { cmd, watcherId, data } = payload;
-    switch (cmd) {
-      case 'data': {
-        await this.onDataReceived(watcherId, data);
-        break;
-      }
-      case 'finished': {
-        await this.stop(watcherId);
-      }
-    }
   }
 
   async setActive(watcherId: Watcher['id']) {
@@ -95,21 +91,30 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
   }
 
   protected createWorker(watcher: Watcher): Worker {
+    const worker = this.findWorker(watcher.id);
+    if (!!worker) {
+      this.log.debug(`worker already exists, skipped`);
+      return worker;
+    }
     return new Worker(processorPath, {
       workerData: { watcher },
       execArgv: [...process.execArgv, '--unhandled-rejections=strict'],
     })
-      .on('message', this.onMessage.bind(this))
-      .on('online', async () => {
-        await this.setActive(watcher.id); // event is emitted when the watcher thread has started
+      .on('message', ({ cmd, data }) => {
+        switch (cmd) {
+          case 'data': {
+            this.eventEmitter.emit('watcher.data', { watcher, data });
+            break;
+          }
+        }
       })
-      .on('exit', async () => {
-        await this.setInactive(watcher.id);
-      })
-      .on('error', async (err) => {
-        this.log.error(err);
-        await this.setInactive(watcher.id);
-      });
+      .on('online', () =>
+        this.eventEmitter.emit('watcher.started', { watcher }),
+      )
+      .on('exit', () => this.eventEmitter.emit('watcher.finished', { watcher }))
+      .on('error', async (err) =>
+        this.eventEmitter.emit('watcher.failed', err, { watcher }),
+      );
   }
 
   async run(watcherId: Watcher['id']) {
@@ -117,13 +122,13 @@ export class WatchersService extends CoreProvider implements OnModuleInit {
     const worker = this.createWorker(watcher);
     this.pool.set(watcher.id, worker);
     await new Promise((resolve) => worker.on('online', resolve));
-    this.log.debug(`watcher ${watcherId} has been started`);
   }
 
   protected async terminate(id: Watcher['id']) {
-    const worker = this.pool.get(id);
+    const worker = this.findWorker(id);
     if (!worker) {
-      throw new Error(`Worker ${id} is not found`);
+      this.log.debug(`already terminated`);
+      return;
     }
     await worker.terminate();
     this.pool.delete(id);

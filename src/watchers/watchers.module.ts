@@ -4,10 +4,11 @@ import { Watcher } from './models/watcher.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WATCHERS } from './watchers.mock';
 import { WatchersController } from './controllers';
+import { WatchersListener } from './watchers.listener';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Watcher])],
-  providers: [WatchersService],
+  providers: [WatchersService, WatchersListener],
   controllers: [WatchersController],
 })
 export class WatchersModule implements OnModuleInit {

@@ -15,8 +15,6 @@ async function bootstrap() {
     ...watcher.continue,
   };
 
-  console.log('continuedQuery', continuedQuery);
-
   for await (const json of bot.continuedQueryGen(continuedQuery)) {
     parentPort.postMessage({
       cmd: 'data',

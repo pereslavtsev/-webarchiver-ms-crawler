@@ -6,10 +6,12 @@ import { LoggingModule } from '@eropple/nestjs-bunyan';
 import { LOGGER } from './logger';
 import * as config from './config';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Global()
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     LoggingModule.forRoot(LOGGER, {
       skipRequestInterceptor: true,
     }),

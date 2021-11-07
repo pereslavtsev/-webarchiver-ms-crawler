@@ -7,6 +7,16 @@ import { Metadata } from '@grpc/grpc-js';
 
 export const protobufPackage = 'webarchiver.crawler.v1';
 
+export interface Page {
+  id: number;
+  ns: number;
+  title: string;
+}
+
+export interface SubscribeWatcherResponse {
+  pages: Page[];
+}
+
 export interface ListWatchersRequest {
   pageSize: number;
   pageToken: string;
@@ -51,44 +61,58 @@ export const WEBARCHIVER_CRAWLER_V1_PACKAGE_NAME = 'webarchiver.crawler.v1';
 export interface WatchersServiceClient {
   listWatchers(
     request: ListWatchersRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<ListWatchersResponse>;
 
   getWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<Watcher>;
 
   createWatcher(
     request: CreateWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<Watcher>;
 
   updateWatcher(
     request: UpdateWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<Watcher>;
 
   runWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<RunWatcherResponse>;
 
   pauseWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<PauseWatcherResponse>;
 
   stopWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Observable<StopWatcherResponse>;
+
+  subscribeWatcher(
+    request: GetWatcherRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<SubscribeWatcherResponse>;
 }
 
 export interface WatchersServiceController {
   listWatchers(
     request: ListWatchersRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ):
     | Promise<ListWatchersResponse>
     | Observable<ListWatchersResponse>
@@ -96,22 +120,26 @@ export interface WatchersServiceController {
 
   getWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   createWatcher(
     request: CreateWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   updateWatcher(
     request: UpdateWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ): Promise<Watcher> | Observable<Watcher> | Watcher;
 
   runWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ):
     | Promise<RunWatcherResponse>
     | Observable<RunWatcherResponse>
@@ -119,7 +147,8 @@ export interface WatchersServiceController {
 
   pauseWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ):
     | Promise<PauseWatcherResponse>
     | Observable<PauseWatcherResponse>
@@ -127,11 +156,18 @@ export interface WatchersServiceController {
 
   stopWatcher(
     request: GetWatcherRequest,
-    metadata?: Metadata,
+    metadata: Metadata,
+    ...rest: any
   ):
     | Promise<StopWatcherResponse>
     | Observable<StopWatcherResponse>
     | StopWatcherResponse;
+
+  subscribeWatcher(
+    request: GetWatcherRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<SubscribeWatcherResponse>;
 }
 
 export function WatchersServiceControllerMethods() {
@@ -144,6 +180,7 @@ export function WatchersServiceControllerMethods() {
       'runWatcher',
       'pauseWatcher',
       'stopWatcher',
+      'subscribeWatcher',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

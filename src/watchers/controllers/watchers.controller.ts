@@ -1,18 +1,20 @@
 import { Controller } from '@nestjs/common';
 import {
-  GetWatcherRequest,
   CreateWatcherRequest,
+  GetWatcherRequest,
+  ListWatchersRequest,
+  ListWatchersResponse,
+  SubscribeWatcherResponse,
+  UpdateWatcherRequest,
   Watcher,
   WatchersServiceController,
   WatchersServiceControllerMethods,
-  UpdateWatcherRequest,
-  ListWatchersRequest,
-  ListWatchersResponse,
 } from '@crawler/proto/watcher';
 import { WatchersService } from '../services';
-import { Metadata } from '@grpc/grpc-js';
+import { Metadata, ServerReadableStream } from '@grpc/grpc-js';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
+import { Observable, Subject } from 'rxjs';
 
 @Controller('watchers')
 @WatchersServiceControllerMethods()
@@ -20,11 +22,58 @@ export class WatchersController
   extends CoreProvider
   implements WatchersServiceController
 {
+  private readonly subscriptions: Subject<SubscribeWatcherResponse>[];
+
   constructor(
     @RootLogger() rootLogger: Bunyan,
     private watchersService: WatchersService,
   ) {
     super(rootLogger);
+  }
+
+  subscribeWatcher(
+    { id }: GetWatcherRequest,
+    metadata?: Metadata,
+    call?: ServerReadableStream<GetWatcherRequest, any>,
+  ): Observable<SubscribeWatcherResponse> {
+    const log = this.log.child({ reqId: metadata.get('x-correlation-id') });
+    const subject = new Subject<SubscribeWatcherResponse>();
+    log.debug(`subscribing on watcher ${id} from ${call.getPeer()}...`);
+    const worker = this.watchersService.findWorker(id);
+    call
+      .on('end', () => console.log('end'))
+      .on('close', () => {
+        console.log('close');
+        subject.complete();
+      })
+      .on('finish', () => {
+        console.log('finish');
+        subject.complete();
+      });
+
+    worker
+      .on('message', ({ data }) => {
+        const receivedPages = data?.query?.pages;
+        if (receivedPages) {
+          console.log(
+            'receivedPages',
+            receivedPages.map((page) => page.title)[0],
+          );
+          const pages = receivedPages.map((page) => ({
+            id: page.pageid,
+            title: page.title,
+          }));
+          subject.next({
+            pages,
+          });
+        }
+      })
+      .on('exit', () => {
+        subject.complete();
+        this.log.debug(`stream has been finished`);
+      });
+
+    return subject.asObservable();
   }
 
   async listWatchers(
