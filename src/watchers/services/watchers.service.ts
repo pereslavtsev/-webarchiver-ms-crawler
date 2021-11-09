@@ -8,7 +8,7 @@ import { ApiParams } from 'mwn';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { buildPaginator } from 'typeorm-cursor-pagination';
-import { ListWatchersRequest } from '@crawler/proto/watcher';
+import { ListWatchersRequest } from '@webarchiver/protoc/dist/crawler';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()

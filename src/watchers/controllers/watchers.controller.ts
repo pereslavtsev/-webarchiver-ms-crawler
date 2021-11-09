@@ -6,13 +6,15 @@ import {
   ListWatchersResponse,
   PageInfo,
   SubscribeWatcherResponse,
+  PauseAllRequest,
+  PauseAllResponse,
   UpdateWatcherRequest,
   Watcher,
   WatchersServiceController,
   WatchersServiceControllerMethods,
-} from '@crawler/proto/watcher';
+} from '@webarchiver/protoc/dist/crawler';
 import { WatchersService } from '../services';
-import { Metadata, ServerReadableStream } from '@grpc/grpc-js';
+import type { Metadata, ServerReadableStream } from '@grpc/grpc-js';
 import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { Observable, Subject } from 'rxjs';
@@ -175,5 +177,13 @@ export class WatchersController
     } catch (error) {
       this.exceptionFilter(error, metadata);
     }
+  }
+
+  pauseAll(
+    request: PauseAllRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Promise<PauseAllResponse> {
+    return [] as any;
   }
 }

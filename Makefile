@@ -1,15 +1,3 @@
-protoc-gen:
-	protoc \
-		--plugin=node_modules/ts-proto/protoc-gen-ts_proto \
-		--ts_proto_out=. src/proto/*.proto \
-		--ts_proto_opt=esModuleInterop=true \
-		--ts_proto_opt=env=node \
-		--ts_proto_opt=nestJs=true \
-		--ts_proto_opt=addGrpcMetadata=true \
-		--ts_proto_opt=addNestjsRestParameter=true \
-		--ts_proto_opt=emitImportedFiles=false \
-		--ts_proto_opt=useDate=true
-
 test-debug:
 	node \
 		--inspect-brk \

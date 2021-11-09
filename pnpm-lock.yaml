@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@eropple/nestjs-bunyan': ^0.5.7
-  '@grpc/grpc-js': ^1.4.2
+  '@grpc/grpc-js': ^1.4.4
   '@grpc/proto-loader': ^0.6.6
   '@mechanicalhuman/bunyan-pretty': 3.0.0
   '@nestjs/cli': ^8.0.0
@@ -44,7 +44,6 @@ specifiers:
   ts-jest: ^27.0.3
   ts-loader: ^9.2.3
   ts-node: ^10.0.0
-  ts-proto: ^1.85.0
   tsconfig-paths: ^3.10.1
   typeorm: ^0.2.38
   typeorm-cursor-pagination: ^0.6.1
@@ -54,14 +53,14 @@ specifiers:
 
 dependencies:
   '@eropple/nestjs-bunyan': 0.5.7_e4a83461ff83341fdc6cb84709354584
-  '@grpc/grpc-js': 1.4.2
+  '@grpc/grpc-js': 1.4.4
   '@grpc/proto-loader': 0.6.6
   '@mechanicalhuman/bunyan-pretty': 3.0.0
   '@nestjs/common': 8.1.2_ad16f1f28877c5242670873e13562245
   '@nestjs/config': 1.1.0_b3e6921aee41404e2866237bfdfd83a3
   '@nestjs/core': 8.1.2_0d6afbaa402819ae5d338ba5fe50664f
   '@nestjs/event-emitter': 1.0.0_77dadb02284d3a1b0ff0caaa5d4d38bd
-  '@nestjs/microservices': 8.1.2_7e17bff04e722e7cd8295b809d687890
+  '@nestjs/microservices': 8.1.2_2749f80d754f150745d8f456176de7c2
   '@nestjs/platform-express': 8.1.2_bbf59b1cbf49bba2b2f47e404ee3cb27
   '@nestjs/schedule': 1.0.1_77dadb02284d3a1b0ff0caaa5d4d38bd
   '@nestjs/typeorm': 8.0.2_12346420c5d0822584d78b786936ea28
@@ -102,7 +101,6 @@ devDependencies:
   ts-jest: 27.0.7_2c4ca6574207836d1023f54689cc81ac
   ts-loader: 9.2.6_typescript@4.4.4
   ts-node: 10.4.0_0cb88d80cb04d25b21fa3ec194608c65
-  ts-proto: 1.85.0
   tsconfig-paths: 3.11.0
   typescript: 4.4.4
 
@@ -553,8 +551,8 @@ packages:
       - supports-color
     dev: true
 
-  /@grpc/grpc-js/1.4.2:
-    resolution: {integrity: sha512-aUN6oGk9un8rfYWz73nQgFxPCYJQYd8LpIGguZHBsNduBMyqG6EWANrsVBuTG+nl/l4dKb3x+qi1l9+oxDxqGg==}
+  /@grpc/grpc-js/1.4.4:
+    resolution: {integrity: sha512-a6222b7Dl6fIlMgzVl7e+NiRoLiZFbpcwvBH2Oli56Bn7W4/3Ld+86hK4ffPn5rx2DlDidmIcvIJiOQXyhv9gA==}
     engines: {node: ^8.13.0 || >=10.10.0}
     dependencies:
       '@grpc/proto-loader': 0.6.6
@@ -914,7 +912,7 @@ packages:
         optional: true
     dependencies:
       '@nestjs/common': 8.1.2_ad16f1f28877c5242670873e13562245
-      '@nestjs/microservices': 8.1.2_7e17bff04e722e7cd8295b809d687890
+      '@nestjs/microservices': 8.1.2_2749f80d754f150745d8f456176de7c2
       '@nestjs/platform-express': 8.1.2_bbf59b1cbf49bba2b2f47e404ee3cb27
       '@nuxtjs/opencollective': 0.3.2
       fast-safe-stringify: 2.1.1
@@ -940,7 +938,7 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@nestjs/microservices/8.1.2_7e17bff04e722e7cd8295b809d687890:
+  /@nestjs/microservices/8.1.2_2749f80d754f150745d8f456176de7c2:
     resolution: {integrity: sha512-7BnKIa3+w6a/1vJO5euE+RTP6ejwlpGRdoAQ64BTpReHxboFzX7C4Zb6cnM84x1AIl/xe8x+fDoUztxJn4LSiA==}
     peerDependencies:
       '@grpc/grpc-js': '*'
@@ -976,7 +974,7 @@ packages:
       redis:
         optional: true
     dependencies:
-      '@grpc/grpc-js': 1.4.2
+      '@grpc/grpc-js': 1.4.4
       '@nestjs/common': 8.1.2_ad16f1f28877c5242670873e13562245
       '@nestjs/core': 8.1.2_0d6afbaa402819ae5d338ba5fe50664f
       iterare: 1.2.1
@@ -1057,7 +1055,7 @@ packages:
       optional: 0.1.4
       '@nestjs/common': 8.1.2_ad16f1f28877c5242670873e13562245
       '@nestjs/core': 8.1.2_0d6afbaa402819ae5d338ba5fe50664f
-      '@nestjs/microservices': 8.1.2_7e17bff04e722e7cd8295b809d687890
+      '@nestjs/microservices': 8.1.2_2749f80d754f150745d8f456176de7c2
       '@nestjs/platform-express': 8.1.2_bbf59b1cbf49bba2b2f47e404ee3cb27
       tslib: 2.3.1
     dev: true
@@ -1112,36 +1110,46 @@ packages:
 
   /@protobufjs/aspromise/1.1.2:
     resolution: {integrity: sha1-m4sMxmPWaafY9vXQiToU00jzD78=}
+    dev: false
 
   /@protobufjs/base64/1.1.2:
     resolution: {integrity: sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==}
+    dev: false
 
   /@protobufjs/codegen/2.0.4:
     resolution: {integrity: sha512-YyFaikqM5sH0ziFZCN3xDC7zeGaB/d0IUb9CATugHWbd1FRFwWwt4ld4OYMPWu5a3Xe01mGAULCdqhMlPl29Jg==}
+    dev: false
 
   /@protobufjs/eventemitter/1.1.0:
     resolution: {integrity: sha1-NVy8mLr61ZePntCV85diHx0Ga3A=}
+    dev: false
 
   /@protobufjs/fetch/1.1.0:
     resolution: {integrity: sha1-upn7WYYUr2VwDBYZ/wbUVLDYTEU=}
     dependencies:
       '@protobufjs/aspromise': 1.1.2
       '@protobufjs/inquire': 1.1.0
+    dev: false
 
   /@protobufjs/float/1.0.2:
     resolution: {integrity: sha1-Xp4avctz/Ap8uLKR33jIy9l7h9E=}
+    dev: false
 
   /@protobufjs/inquire/1.1.0:
     resolution: {integrity: sha1-/yAOPnzyQp4tyvwRQIKOjMY48Ik=}
+    dev: false
 
   /@protobufjs/path/1.1.2:
     resolution: {integrity: sha1-bMKyDFya1q0NzP0hynZz2Nf79o0=}
+    dev: false
 
   /@protobufjs/pool/1.1.0:
     resolution: {integrity: sha1-Cf0V8tbTq/qbZbw2ZQbWrXhG/1Q=}
+    dev: false
 
   /@protobufjs/utf8/1.1.0:
     resolution: {integrity: sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=}
+    dev: false
 
   /@sindresorhus/is/0.14.0:
     resolution: {integrity: sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==}
@@ -1331,6 +1339,7 @@ packages:
 
   /@types/long/4.0.1:
     resolution: {integrity: sha512-5tXH6Bx/kNGd3MgffdmP4dy2Z+G4eaXw0SE81Tq3BNadtnMR5/ySMzX4SLEzHJzSmPNn4HIdpQsBvXMUykr58w==}
+    dev: false
 
   /@types/mime/1.3.2:
     resolution: {integrity: sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==}
@@ -1342,16 +1351,8 @@ packages:
   /@types/node/16.11.6:
     resolution: {integrity: sha512-ua7PgUoeQFjmWPcoo9khiPum3Pd60k4/2ZGXt18sm2Slk0W0xZTqt5Y0Ny1NyBiN1EVQ/+FaF9NcY4Qe6rwk5w==}
 
-  /@types/object-hash/1.3.4:
-    resolution: {integrity: sha512-xFdpkAkikBgqBdG9vIlsqffDV8GpvnPEzs0IUtr1v3BEB97ijsFQ4RXVbUZwjFThhB4MDSTUfvmxUD5PGx0wXA==}
-    dev: true
-
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
-    dev: true
-
-  /@types/prettier/1.19.1:
-    resolution: {integrity: sha512-5qOlnZscTn4xxM5MeGXAMOsIOIKIbh9e85zJWfBRVPlRMEVawzoPhINYbRGkBZCI8LxvBe7tJCdWiarA99OZfQ==}
     dev: true
 
   /@types/prettier/2.4.1:
@@ -2432,10 +2433,6 @@ packages:
       abab: 2.0.5
       whatwg-mimetype: 2.3.0
       whatwg-url: 8.7.0
-    dev: true
-
-  /dataloader/1.4.0:
-    resolution: {integrity: sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==}
     dev: true
 
   /debug/2.6.9:
@@ -4394,6 +4391,7 @@ packages:
 
   /long/4.0.0:
     resolution: {integrity: sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==}
+    dev: false
 
   /long/5.1.0:
     resolution: {integrity: sha512-eNc10JP6ezXp/qxXZlKS4OHAKNae3je9LUkjmXPDEa+Iidlz0n4nFi/9LT+GOgcayMWhykLoISN+v0THeOiWQQ==}
@@ -4700,11 +4698,6 @@ packages:
   /object-assign/4.1.1:
     resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}
     engines: {node: '>=0.10.0'}
-
-  /object-hash/1.3.1:
-    resolution: {integrity: sha512-OSuu/pU4ENM9kmREg0BdNrUDIl1heYa4mBZacJc+vVWz4GtAwu7jO8s4AIt2aGRUTqxykpWzI3Oqnsm13tTMDA==}
-    engines: {node: '>= 0.10.0'}
-    dev: true
 
   /object-hash/2.2.0:
     resolution: {integrity: sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==}
@@ -5120,6 +5113,7 @@ packages:
       '@types/long': 4.0.1
       '@types/node': 16.11.6
       long: 4.0.0
+    dev: false
 
   /proxy-addr/2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -5931,33 +5925,6 @@ packages:
       make-error: 1.3.6
       typescript: 4.4.4
       yn: 3.1.1
-    dev: true
-
-  /ts-poet/4.6.1:
-    resolution: {integrity: sha512-DXJ+mBJIDp+jiaUgB4N5I/sczHHDU2FWacdbDNVAVS4Mh4hb7ckpvUWVW7m7/nAOcjR0r4Wt+7AoO7FeJKExfA==}
-    dependencies:
-      '@types/prettier': 1.19.1
-      lodash: 4.17.21
-      prettier: 2.4.1
-    dev: true
-
-  /ts-proto-descriptors/1.3.1:
-    resolution: {integrity: sha512-Cybb3fqceMwA6JzHdC32dIo8eVGVmXrM6TWhdk1XQVVHT/6OQqk0ioyX1dIdu3rCIBhRmWUhUE4HsyK+olmgMw==}
-    dependencies:
-      long: 4.0.0
-      protobufjs: 6.11.2
-    dev: true
-
-  /ts-proto/1.85.0:
-    resolution: {integrity: sha512-wYDzMl8LVqV8K65oI463KSIkfAxd3ulzMqZD+5NYWawwKfkJVNfTXjK847NJEHt4UBxSLZ0+aBjuc++cFNAUvw==}
-    hasBin: true
-    dependencies:
-      '@types/object-hash': 1.3.4
-      dataloader: 1.4.0
-      object-hash: 1.3.1
-      protobufjs: 6.11.2
-      ts-poet: 4.6.1
-      ts-proto-descriptors: 1.3.1
     dev: true
 
   /tsconfig-paths-webpack-plugin/3.5.1:
