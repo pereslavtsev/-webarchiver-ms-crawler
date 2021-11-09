@@ -7,6 +7,14 @@
     "email": "dev@pereslavtsev.com",
     "url": "https://www.pereslavtsev.com/"
   },
+  "homepage": "https://github.com/pereslavtsev/webarchiver-ms-crawler#readme",
+  "bugs": {
+    "url": "https://github.com/pereslavtsev/webarchiver-ms-crawler/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pereslavtsev/webarchiver-ms-crawler.git"
+  },
   "license": "ISC",
   "scripts": {
     "prebuild": "rimraf dist",
