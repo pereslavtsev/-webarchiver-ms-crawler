@@ -9,10 +9,10 @@ import { WatcherPayload } from './interfaces';
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(SharedModule);
   const bot = app.get<mwn>(MwnConstants.MWN_INSTANCE);
-  const { id, query, ...watcher } = workerData.watcher as Watcher;
+  const { id, initialQuery, continueQuery } = workerData.watcher as Watcher;
   const continuedQuery = {
-    ...query,
-    ...watcher.continue,
+    ...initialQuery,
+    ...continueQuery,
   };
 
   for await (const json of bot.continuedQueryGen(continuedQuery)) {

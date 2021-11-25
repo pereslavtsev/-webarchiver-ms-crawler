@@ -1,20 +1,30 @@
 import { Transport, ClientOptions } from '@nestjs/microservices';
+import { watchers } from '@pereslavtsev/webarchiver-protoc';
 import { resolve } from 'path';
-import protoc from '@webarchiver/protoc';
 
-const port = process.env.PORT || 50051;
+const port = process.env.PORT || 10003;
 
 export const grpcClientOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     url: `0.0.0.0:${port}`,
-    package: protoc.crawler.protobufPackage,
+    package: watchers.protobufPackage,
     protoPath: resolve(
       'node_modules',
-      '@webarchiver/protoc',
+      '@pereslavtsev/webarchiver-protoc',
       'dist',
-      'crawler',
-      'crawler.proto',
+      'proto',
+      `webarchiver.proto`,
     ),
+    loader: {
+      includeDirs: [
+        resolve(
+          'node_modules',
+          '@pereslavtsev/webarchiver-protoc',
+          'dist',
+          'proto',
+        ),
+      ],
+    },
   },
 };

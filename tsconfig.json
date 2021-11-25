@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-      "@crawler/*": ["./src/*"]
+      "@crawler/*": ["./src/modules/*"]
     }
   }
 }

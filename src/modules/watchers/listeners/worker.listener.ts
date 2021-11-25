@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CoreProvider } from '@crawler/shared';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
-import { WatchersService } from './services';
-import { OnEvent } from '@nestjs/event-emitter';
+import { WatchersService } from '../services';
 import { Watcher } from '@crawler/watchers/models';
 import type { ApiPage, ApiResponse } from 'mwn';
 import colorizeJson from 'json-colorizer';
+import { OnWorker } from '../decorators';
+import { LoggableProvider } from '@pereslavtsev/webarchiver-misc';
 
 @Injectable()
-export class WatchersListener extends CoreProvider {
+export class WorkerListener extends LoggableProvider {
   constructor(
     @RootLogger() rootLogger: Bunyan,
     private readonly watchersService: WatchersService,
@@ -19,31 +19,31 @@ export class WatchersListener extends CoreProvider {
   /**
    * Emitted when the watcher thread has started
    */
-  @OnEvent('watcher.started')
+  @OnWorker.Started()
   async handleWatcherStared(payload: { watcher: Watcher }): Promise<void> {
     const { watcher } = payload;
     this.log.debug(
       `watcher ${watcher.name} has been started with query`,
-      colorizeJson(JSON.stringify(watcher.query)),
+      colorizeJson(JSON.stringify(watcher.initialQuery)),
     );
-    await this.watchersService.setActive(watcher.id);
+    await this.watchersService.active(watcher.id);
   }
 
-  @OnEvent('watcher.finished')
+  @OnWorker.Finished()
   async handleWatcherFinished(payload): Promise<void> {
     const { watcher } = payload;
     this.log.debug(`watcher ${watcher.name} was finished`);
-    await this.watchersService.setInactive(watcher.id);
+    await this.watchersService.pause(watcher.id);
   }
 
-  @OnEvent('watcher.failed')
+  @OnWorker.Failed()
   async handleWatcherFailed(error: Error, payload): Promise<void> {
     const { watcher } = payload;
     this.log.error(error, `watcher ${watcher.name} was failed`);
-    await this.watchersService.setInactive(watcher.id);
+    await this.watchersService.stop(watcher.id);
   }
 
-  @OnEvent('watcher.data')
+  @OnWorker.Data()
   async handleWatcherData(payload: {
     watcher: Watcher;
     data: ApiResponse;
