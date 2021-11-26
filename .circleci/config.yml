@@ -70,7 +70,7 @@ jobs:
           -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
       - run:
           name: Run database migrations
-          command: pnpm mirgations:run
+          command: pnpm migrations:run
       - run:
           name: Seed database
           command: pnpm seed:run
