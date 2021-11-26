@@ -2,20 +2,26 @@ version: "3.9"
 
 services:
   db:
-    container_name: "crawler-db"
-    image: "postgres:13-alpine"
+    container_name: "ms-crawler-db"
+    image: "postgres:13.5-alpine3.14"
     environment:
       - POSTGRES_PASSWORD=webarchiver
       - POSTGRES_USER=webarchiver
       - POSTGRES_DB=webarchiver
     tty: true
   server:
-    container_name: "crawler"
-    build: .
+    container_name: "ms-crawler-server"
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; make migrations-run && make seed-run && node dist/main'
+    build:
+      context: .
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
     environment:
       - DATABASE_URL=postgres://webarchiver:webarchiver@db:5432/webarchiver
       - BOT_USERNAME=${BOT_USERNAME}
       - BOT_PASSWORD=${BOT_PASSWORD}
+    ports:
+      - "10003:10003"
     depends_on:
       - db
     tty: true

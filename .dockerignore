@@ -9,6 +9,10 @@ node_modules
 
 .eslint*
 .prettier*
+.commitlint*
+
+.circleci
+.husky
 
 Dockerfile
 docker-compose.yml

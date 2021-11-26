@@ -21,6 +21,9 @@ RUN pnpm build
 
 FROM node:14.18.1-alpine3.14
 
+RUN apk update \
+    && apk --no-cache --update add bash build-base
+
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/dist ./dist
@@ -29,7 +32,7 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 # Migrations
 COPY tsconfig.json .
 COPY package.json .
-COPY src/migrations src/migrations
-COPY src/ormconfig.ts src/ormconfig.ts
+COPY Makefile .
+COPY src src
 
 CMD ["node", "dist/main"]
