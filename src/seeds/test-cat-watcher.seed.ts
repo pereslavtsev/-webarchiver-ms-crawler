@@ -9,6 +9,7 @@ export default class TestCatWatcher implements Seeder {
       id: '6eaf8d65-3b3a-4099-8f1d-1defd429d3be',
       initialQuery: categoryMembersQuery('Программное обеспечение по алфавиту'),
       name: 'test_cat',
+      status: Watcher.Status.PENDING,
     });
   }
 }

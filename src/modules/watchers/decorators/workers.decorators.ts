@@ -17,10 +17,10 @@ export class OnWorker {
   }
 
   static Finished() {
-    return this.createDecorator('started');
+    return this.createDecorator('finished');
   }
 
   static Failed() {
-    return this.createDecorator('started');
+    return this.createDecorator('failed');
   }
 }

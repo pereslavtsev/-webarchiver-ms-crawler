@@ -34,7 +34,7 @@ export class WorkersService extends LoggableProvider {
       .on('message', ({ cmd, data }) => {
         switch (cmd) {
           case 'data': {
-            this.eventEmitter.emit('watcher.data', { watcher, data });
+            this.eventEmitter.emit('worker.data', { watcher, data });
             break;
           }
         }
@@ -59,6 +59,9 @@ export class WorkersService extends LoggableProvider {
   }
 
   async terminate(watcherId: Watcher['id']): Promise<void> {
+    if (!this.pool.has(watcherId)) {
+      return;
+    }
     const worker = this.pool.get(watcherId);
     await worker.terminate();
     this.pool.delete(watcherId);

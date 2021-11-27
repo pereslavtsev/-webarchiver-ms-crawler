@@ -32,7 +32,7 @@ export class Watcher implements watchers.Watcher {
 
   @Column('json')
   @IsJSON()
-  readonly initialQuery: ApiParams;
+  readonly initialQuery: ApiParams | string;
 
   @Column({ type: 'json', nullable: true })
   @IsJSON()

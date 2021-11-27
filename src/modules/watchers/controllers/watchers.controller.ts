@@ -1,4 +1,4 @@
-import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, UsePipes, UseFilters, ValidationPipe } from '@nestjs/common';
 import { watchers } from '@pereslavtsev/webarchiver-protoc';
 import { WatchersService } from '../services';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
@@ -13,6 +13,8 @@ import {
   ListWatchersDto,
   UpdateWatcherDto,
 } from '../dto';
+import { plainToInstance, instanceToPlain } from 'class-transformer';
+import { PageInfo } from '../models/page-info.model';
 
 const { WatchersServiceControllerMethods } = watchers;
 
@@ -51,22 +53,18 @@ export class WatchersController
     }
 
     const subject = this.subscriptions.get(watcher.id);
-    const pages = receivedPages.map<watchers.PageInfo>((page) => ({
-      id: page.pageid,
-      ns: page.ns,
-      title: page.title,
-      contentModel: page['contentmodel'],
-      pageLanguage: page['pagelanguage'],
-      pageLanguageHtmlCode: page['pagelanguagehtmlcode'],
-      pageLanguageDir: page['pagelanguagedir'],
-      touched: page['touched'],
-      lastRevId: page['lastrevid'],
-      length: page['length'],
-      fullUrl: page['fullurl'],
-      editUrl: page['editurl'],
-      canonicalUrl: page['canonicalurl'],
-    }));
-    subject.next({ pages });
+
+    const pages = receivedPages
+      .map((p) =>
+        plainToInstance(PageInfo, p, {
+          groups: ['mediawiki', 'grpc'],
+        }),
+      )
+      .map((p) => instanceToPlain(p, { ignoreDecorators: true }));
+
+    subject.next({
+      pages: pages as PageInfo[],
+    });
   }
 
   @UsePipes(new ValidationPipe())

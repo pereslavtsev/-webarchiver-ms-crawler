@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { mwn } from 'mwn';
+import { ApiParams, mwn } from "mwn";
 import { MwnConstants } from 'nest-mwn';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
 import { SharedModule } from '@crawler/shared';
@@ -11,7 +11,7 @@ async function bootstrap() {
   const bot = app.get<mwn>(MwnConstants.MWN_INSTANCE);
   const { id, initialQuery, continueQuery } = workerData.watcher as Watcher;
   const continuedQuery = {
-    ...initialQuery,
+    ...(initialQuery as ApiParams),
     ...continueQuery,
   };
 
@@ -22,6 +22,8 @@ async function bootstrap() {
       data: json,
     } as WatcherPayload);
   }
+
+  await app.close();
 }
 
 if (!isMainThread) {

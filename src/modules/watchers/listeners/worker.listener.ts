@@ -31,9 +31,13 @@ export class WorkerListener extends LoggableProvider {
 
   @OnWorker.Finished()
   async handleWatcherFinished(payload): Promise<void> {
-    const { watcher } = payload;
+    const watcher = await this.watchersService.findById(payload.watcher.id);
     this.log.debug(`watcher ${watcher.name} was finished`);
-    await this.watchersService.pause(watcher.id);
+    switch (watcher.status) {
+      case Watcher.Status.ACTIVE: {
+        await this.watchersService.pause(watcher.id);
+      }
+    }
   }
 
   @OnWorker.Failed()

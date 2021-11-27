@@ -1,6 +1,6 @@
 {
-  "name": "@webarchiver/crawler",
-  "version": "0.0.1",
+  "name": "@pereslavtsev/webarchiver-ms-crawler",
+  "version": "1.0.0",
   "description": "A crawler microservice for WebArchiver bot",
   "author": {
     "name": "Vitaly Pereslavtsev",
@@ -52,7 +52,7 @@
     "@nestjs/schedule": "^1.0.1",
     "@nestjs/typeorm": "^8.0.2",
     "@pereslavtsev/webarchiver-misc": "^1.0.0",
-    "@pereslavtsev/webarchiver-protoc": "^1.0.1",
+    "@pereslavtsev/webarchiver-protoc": "^1.0.2",
     "bull": "^4.1.0",
     "bunyan": "^1.8.15",
     "class-transformer": "^0.5.1",

@@ -20,6 +20,7 @@ export class WatcherListener extends LoggableProvider {
     const worker = this.workersService.findById(watcher.id);
     if (!!worker) {
       this.log.debug(`worker already exists, skipped`);
+      return;
     }
 
     // if worker doesn't exists create that
@@ -30,8 +31,9 @@ export class WatcherListener extends LoggableProvider {
   async handleWatcherPausedEvent(watcher: Watcher): Promise<void> {
     // check if worker already exists
     const worker = this.workersService.findById(watcher.id);
-    if (!!worker) {
-      this.log.debug(`worker already exists, skipped`);
+    if (!worker) {
+      this.log.debug(`worker already terminated, skipped`);
+      return;
     }
 
     await this.workersService.terminate(watcher.id);

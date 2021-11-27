@@ -1,6 +1,6 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { grpcClientOptions } from './grpc.options';
-import { Logger } from '@crawler/shared';
+import { HttpExceptionFilter, Logger } from '@crawler/shared';
 import { AppModule } from '@crawler/app.module';
 import { ROOT_LOGGER } from '@eropple/nestjs-bunyan';
 import { GrpcLoggingInterceptor } from '@pereslavtsev/webarchiver-misc';
@@ -12,10 +12,12 @@ async function bootstrap() {
     logger: new Logger(),
   });
   const rootLogger = app.get(ROOT_LOGGER);
-  app.useGlobalInterceptors(
-    new GrpcLoggingInterceptor(rootLogger),
-    new ClassSerializerInterceptor(app.get(Reflector), { groups: ['grpc'] }),
-  );
+  app
+    .useGlobalInterceptors(
+      new GrpcLoggingInterceptor(rootLogger),
+      new ClassSerializerInterceptor(app.get(Reflector), { groups: ['grpc'] }),
+    )
+    .useGlobalFilters(new HttpExceptionFilter());
   app.enableShutdownHooks();
   await app.listen();
 }
