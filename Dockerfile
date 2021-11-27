@@ -10,6 +10,7 @@ ENV GITHUB_TOKEN=$GITHUB_TOKEN
 WORKDIR /usr/src/app
 
 COPY .npmrc .
+COPY Makefile .
 COPY package.json .
 COPY pnpm-lock.yaml .
 
