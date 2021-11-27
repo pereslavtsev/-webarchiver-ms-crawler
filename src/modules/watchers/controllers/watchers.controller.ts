@@ -1,6 +1,6 @@
-import { Controller, UsePipes, UseFilters, ValidationPipe } from '@nestjs/common';
+import { Controller, UsePipes, ValidationPipe } from '@nestjs/common';
 import { watchers } from '@pereslavtsev/webarchiver-protoc';
-import { WatchersService } from '../services';
+import { WatchersService, WorkersService } from '../services';
 import { Bunyan, RootLogger } from '@eropple/nestjs-bunyan';
 import { Observable, Subject } from 'rxjs';
 import type { ApiPage, ApiResponse } from 'mwn';
@@ -34,6 +34,7 @@ export class WatchersController
   constructor(
     @RootLogger() rootLogger: Bunyan,
     private watchersService: WatchersService,
+    private workersService: WorkersService,
   ) {
     super(rootLogger);
   }
@@ -128,8 +129,9 @@ export class WatchersController
   }
 
   @UsePipes(new ValidationPipe())
-  pauseAllWatchers(): Promise<watchers.PauseAllWatchersResponse> {
-    // TODO: !
-    return [] as any;
+  async pauseAllWatchers(): Promise<watchers.PauseAllWatchersResponse> {
+    await this.workersService.terminateAll();
+    await this.watchersService.pauseAll();
+    return;
   }
 }

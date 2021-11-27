@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ApiParams, mwn } from "mwn";
+import { ApiParams, mwn } from 'mwn';
 import { MwnConstants } from 'nest-mwn';
 import { isMainThread, parentPort, workerData } from 'worker_threads';
 import { SharedModule } from '@crawler/shared';

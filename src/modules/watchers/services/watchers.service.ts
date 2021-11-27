@@ -88,6 +88,10 @@ export class WatchersService extends LoggableProvider {
     return watcher;
   }
 
+  async pauseAll(): Promise<void> {
+    await this.watchersRepository.update({}, { status: Watcher.Status.PAUSED });
+  }
+
   async stop(watcherId: Watcher['id']): Promise<Watcher> {
     const watcher = await this.setStatus(watcherId, Watcher.Status.PENDING);
     await this.watchersRepository.update(watcherId, { continueQuery: null });

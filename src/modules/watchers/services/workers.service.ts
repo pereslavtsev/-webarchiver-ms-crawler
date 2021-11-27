@@ -58,6 +58,12 @@ export class WorkersService extends LoggableProvider {
     return worker;
   }
 
+  async terminateAll(): Promise<void> {
+    await Promise.all(
+      [...this.pool.values()].map((worker) => worker.terminate()),
+    );
+  }
+
   async terminate(watcherId: Watcher['id']): Promise<void> {
     if (!this.pool.has(watcherId)) {
       return;
